@@ -13,17 +13,19 @@ export class RegisterUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   public async execute({ email, name, password }: IRegisterUserRequest) {
-    const user = await this.usersRepository.findByEmail(email);
-    if (user) {
+    const userAlreadyExists = await this.usersRepository.findByEmail(email);
+    if (userAlreadyExists) {
       throw new UserAlreadyExists();
     }
 
     const passwordHash = await hash(password, 6);
 
-    await this.usersRepository.create({
+    const user = await this.usersRepository.create({
       email,
       name,
       password: passwordHash,
     });
+
+    return { user };
   }
 }
