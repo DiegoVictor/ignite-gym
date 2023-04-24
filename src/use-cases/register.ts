@@ -2,17 +2,22 @@ import { hash } from 'bcryptjs';
 
 import { IUsersRepository } from '@/repositories/users-repository';
 import { UserAlreadyExists } from './errors/user-already-exists';
+import { IUser } from '@/contracts/user';
 
-interface IRegisterUserRequest {
-  email: string;
-  name: string;
-  password: string;
+type IRegisterUserRequest = IUser;
+
+interface IRegisterUserResponse {
+  user: IUser;
 }
 
 export class RegisterUserUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
-  public async execute({ email, name, password }: IRegisterUserRequest) {
+  public async execute({
+    email,
+    name,
+    password,
+  }: IRegisterUserRequest): Promise<IRegisterUserResponse> {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
     if (userAlreadyExists) {
       throw new UserAlreadyExists();
