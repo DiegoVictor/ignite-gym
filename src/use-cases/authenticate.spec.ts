@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { hash } from 'bcryptjs';
 import { faker } from '@faker-js/faker';
 
@@ -8,14 +8,19 @@ import { InMemoryUsersRepository } from '@/repositories/in-memory/users-reposito
 import { AuthenticateUseCase } from './authenticate';
 import { InvalidCredentials } from './errors/invalid-credentials';
 
+let repository: InMemoryUsersRepository;
+let authenticateUseCase: AuthenticateUseCase;
+
 describe('Authenticate Use Case', () => {
+  beforeEach(() => {
+    repository = new InMemoryUsersRepository();
+    authenticateUseCase = new AuthenticateUseCase(repository);
+  });
+
   it('should be able to authenticate', async () => {
     const { email, name, password } = factory.attrs<IUser>('User');
 
-    const repository = new InMemoryUsersRepository();
     await repository.create({ email, name, password: await hash(password, 6) });
-
-    const authenticateUseCase = new AuthenticateUseCase(repository);
 
     const { user } = await authenticateUseCase.execute({
       email,
@@ -32,9 +37,6 @@ describe('Authenticate Use Case', () => {
 
   it('should not be able to authenticate with wrong email', async () => {
     const { email, password } = factory.attrs<IUser>('User');
-    const repository = new InMemoryUsersRepository();
-
-    const authenticateUseCase = new AuthenticateUseCase(repository);
 
     await expect(async () =>
       authenticateUseCase.execute({
@@ -47,14 +49,11 @@ describe('Authenticate Use Case', () => {
   it('should not be able to authenticate with wrong password', async () => {
     const { email, name, password } = factory.attrs<IUser>('User');
 
-    const repository = new InMemoryUsersRepository();
     await repository.create({
       email,
       name,
       password: await hash(password, 6),
     });
-
-    const authenticateUseCase = new AuthenticateUseCase(repository);
 
     expect(
       async () =>
