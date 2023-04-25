@@ -3,4 +3,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [tsconfigPaths()],
+  test: {
+    coverage: {
+      reportsDirectory: 'tests/coverage',
+    },
+  },
 });
