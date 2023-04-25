@@ -1,8 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-import { PrismaUserRepository } from '@/repositories/prisma/users-repository';
-import { AuthenticateUseCase } from '@/use-cases/authenticate';
+import { makeAuthenticateUseCase } from '@/use-cases/factory/make-authenticate-use-case';
 
 export async function authenticate(
   request: FastifyRequest,
@@ -14,8 +13,7 @@ export async function authenticate(
   });
   const { email, password } = schema.parse(request.body);
 
-  const usersRepository = new PrismaUserRepository();
-  const authenticateUserUseCase = new AuthenticateUseCase(usersRepository);
+  const authenticateUserUseCase = makeAuthenticateUseCase();
   await authenticateUserUseCase.execute({ email, password });
 
   return reply.status(200).send();
