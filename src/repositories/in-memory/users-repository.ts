@@ -1,6 +1,7 @@
+import { randomUUID } from 'node:crypto';
+
 import { IUser } from '@/contracts/user';
 import { IUsersRepository } from '../users-repository';
-import { randomUUID } from 'crypto';
 
 export class InMemoryUsersRepository implements IUsersRepository {
   public users: IUser[] = [];
