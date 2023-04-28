@@ -1,5 +1,6 @@
 import { ICheckInsRepository } from '@/repositories/check-ins-repository';
 import { ICheckIn } from '@/contracts/check-in';
+import { CantCheckInTwiceInADay } from './errors/cant-check-in-twice-in-a-day';
 
 interface ICheckInUseCaseRequest {
   userId: string;
@@ -22,7 +23,7 @@ export class CheckInUseCase {
       new Date()
     );
     if (checkInOnSameDay) {
-      throw new Error();
+      throw new CantCheckInTwiceInADay();
     }
 
     const checkIn = await this.checkInsRepository.create({
