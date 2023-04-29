@@ -8,6 +8,7 @@ import { InMemoryGymsRepository } from '@/repositories/in-memory/gyms-repository
 import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
 import { NotFound } from './errors/not-found';
+import { CantCheckInFarFromGym } from './errors/cant-check-in-far-from-gym';
 
 let checkInsRepository: InMemoryCheckInsRepository;
 let gymsRepository: InMemoryGymsRepository;
@@ -36,8 +37,8 @@ describe('Check In Use Case', () => {
       gymId: gym.id,
       userId,
       user: {
-        latitude: Number(faker.address.latitude()),
-        longitude: Number(faker.address.longitude()),
+        latitude: gym.latitude,
+        longitude: gym.longitude,
       },
     });
 
@@ -62,8 +63,8 @@ describe('Check In Use Case', () => {
       gymId: gym.id,
       userId,
       user: {
-        latitude: Number(faker.address.latitude()),
-        longitude: Number(faker.address.longitude()),
+        latitude: gym.latitude,
+        longitude: gym.longitude,
       },
     });
 
@@ -72,8 +73,8 @@ describe('Check In Use Case', () => {
         gymId: gym.id,
         userId,
         user: {
-          latitude: Number(faker.address.latitude()),
-          longitude: Number(faker.address.longitude()),
+          latitude: gym.latitude,
+          longitude: gym.longitude,
         },
       })
     ).rejects.toThrow(CantCheckInTwiceInADay);
@@ -91,8 +92,8 @@ describe('Check In Use Case', () => {
       gymId: gym.id,
       userId,
       user: {
-        latitude: Number(faker.address.latitude()),
-        longitude: Number(faker.address.longitude()),
+        latitude: gym.latitude,
+        longitude: gym.longitude,
       },
     });
 
@@ -102,8 +103,8 @@ describe('Check In Use Case', () => {
       gymId: gym.id,
       userId,
       user: {
-        latitude: Number(faker.address.latitude()),
-        longitude: Number(faker.address.longitude()),
+        latitude: gym.latitude,
+        longitude: gym.longitude,
       },
     });
 
@@ -130,5 +131,27 @@ describe('Check In Use Case', () => {
         },
       })
     ).rejects.toThrow(NotFound);
+  });
+
+  it('should not be able to check in on a distant gym', async () => {
+    const gym = factory.attrs<IGym>('Gym');
+    const userId = faker.datatype.uuid();
+
+    gymsRepository.gyms.push({
+      ...gym,
+      latitude: 20.4337,
+      longitude: 79.4074,
+    });
+
+    await expect(async () =>
+      checkInUseCase.execute({
+        gymId: gym.id,
+        userId,
+        user: {
+          latitude: 80.0191,
+          longitude: 49.4327,
+        },
+      })
+    ).rejects.toThrow(CantCheckInFarFromGym);
   });
 });
