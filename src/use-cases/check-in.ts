@@ -3,6 +3,8 @@ import { ICheckIn } from '@/contracts/check-in';
 import { IGymsRepository } from '@/repositories/gyms-repository';
 import { NotFound } from './errors/not-found';
 import { CantCheckInTwiceInADay } from './errors/cant-check-in-twice-in-a-day';
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates';
+import { CantCheckInFarFromGym } from './errors/cant-check-in-far-from-gym';
 
 interface ICheckInUseCaseRequest {
   userId: string;
@@ -26,6 +28,7 @@ export class CheckInUseCase {
   public async execute({
     userId,
     gymId,
+    user: { latitude, longitude },
   }: ICheckInUseCaseRequest): Promise<ICheckInUseCaseResponse> {
     const gym = await this.gymsRepository.findById(gymId);
     if (!gym) {
@@ -33,6 +36,21 @@ export class CheckInUseCase {
     }
 
     // calculate distance between user and gym
+    const distance = getDistanceBetweenCoordinates(
+      {
+        latitude,
+        longitude,
+      },
+      {
+        latitude: gym.latitude,
+        longitude: gym.longitude,
+      }
+    );
+
+    const MAX_DISTANCE = 0.1;
+    if (distance > MAX_DISTANCE) {
+      throw new CantCheckInFarFromGym();
+    }
 
     const checkInOnSameDay = await this.checkInsRepository.findByUserIdOnDate(
       userId,
