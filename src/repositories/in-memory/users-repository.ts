@@ -8,7 +8,7 @@ export class InMemoryUsersRepository implements IUsersRepository {
 
   public async create(data: IUser) {
     const user = {
-      id: randomUUID(),
+      id: data.id ?? randomUUID(),
       email: data.email,
       name: data.name,
       password: data.password,
