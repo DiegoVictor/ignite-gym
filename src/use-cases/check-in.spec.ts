@@ -3,12 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CheckInUseCase } from './check-in';
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/check-ins-repository';
 import { faker } from '@faker-js/faker';
-import { CantCheckInTwiceInADay } from './errors/cant-check-in-twice-in-a-day';
+import { MaxNumberOfCheckIns } from './errors/max-number-of-check-ins';
 import { InMemoryGymsRepository } from '@/repositories/in-memory/gyms-repository';
 import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
 import { NotFound } from './errors/not-found';
-import { CantCheckInFarFromGym } from './errors/cant-check-in-far-from-gym';
+import { MaxDistanceCheckIn } from './errors/max-distance-check-in';
+
+type IRequiredGym = Required<IGym>;
 
 let checkInsRepository: InMemoryCheckInsRepository;
 let gymsRepository: InMemoryGymsRepository;
@@ -28,10 +30,10 @@ describe('Check In Use Case', () => {
   });
 
   it('should be able to check in', async () => {
-    const gym = factory.attrs<IGym>('Gym');
+    const gym = factory.attrs<IRequiredGym>('Gym');
     const userId = faker.datatype.uuid();
 
-    gymsRepository.gyms.push(gym);
+    await gymsRepository.create(gym);
 
     const { checkIn } = await checkInUseCase.execute({
       gymId: gym.id,
@@ -52,7 +54,7 @@ describe('Check In Use Case', () => {
   });
 
   it('should not be able to check in twice in the same day', async () => {
-    const gym = factory.attrs<IGym>('Gym');
+    const gym = factory.attrs<IRequiredGym>('Gym');
     const userId = faker.datatype.uuid();
 
     vi.setSystemTime(new Date(2023, 5, 27, 10, 39, 0, 0));
@@ -77,11 +79,11 @@ describe('Check In Use Case', () => {
           longitude: gym.longitude,
         },
       })
-    ).rejects.toThrow(CantCheckInTwiceInADay);
+    ).rejects.toThrow(MaxNumberOfCheckIns);
   });
 
   it('should be able to check in twice in different days', async () => {
-    const gym = factory.attrs<IGym>('Gym');
+    const gym = factory.attrs<IRequiredGym>('Gym');
     const userId = faker.datatype.uuid();
 
     vi.setSystemTime(new Date(2023, 5, 26, 10, 39, 0, 0));
@@ -134,7 +136,7 @@ describe('Check In Use Case', () => {
   });
 
   it('should not be able to check in on a distant gym', async () => {
-    const gym = factory.attrs<IGym>('Gym');
+    const gym = factory.attrs<IRequiredGym>('Gym');
     const userId = faker.datatype.uuid();
 
     gymsRepository.gyms.push({
@@ -152,6 +154,6 @@ describe('Check In Use Case', () => {
           longitude: 49.4327,
         },
       })
-    ).rejects.toThrow(CantCheckInFarFromGym);
+    ).rejects.toThrow(MaxDistanceCheckIn);
   });
 });

@@ -2,9 +2,9 @@ import { ICheckInsRepository } from '@/repositories/check-ins-repository';
 import { ICheckIn } from '@/contracts/check-in';
 import { IGymsRepository } from '@/repositories/gyms-repository';
 import { NotFound } from './errors/not-found';
-import { CantCheckInTwiceInADay } from './errors/cant-check-in-twice-in-a-day';
+import { MaxNumberOfCheckIns } from './errors/max-number-of-check-ins';
 import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates';
-import { CantCheckInFarFromGym } from './errors/cant-check-in-far-from-gym';
+import { MaxDistanceCheckIn } from './errors/max-distance-check-in';
 
 interface ICheckInUseCaseRequest {
   userId: string;
@@ -49,7 +49,7 @@ export class CheckInUseCase {
 
     const MAX_DISTANCE = 0.1;
     if (distance > MAX_DISTANCE) {
-      throw new CantCheckInFarFromGym();
+      throw new MaxDistanceCheckIn();
     }
 
     const checkInOnSameDay = await this.checkInsRepository.findByUserIdOnDate(
@@ -57,7 +57,7 @@ export class CheckInUseCase {
       new Date()
     );
     if (checkInOnSameDay) {
-      throw new CantCheckInTwiceInADay();
+      throw new MaxNumberOfCheckIns();
     }
 
     const checkIn = await this.checkInsRepository.create({
