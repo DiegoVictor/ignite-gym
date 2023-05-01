@@ -19,7 +19,7 @@ export class InMemoryUsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findByEmail(email: string): Promise<IUser | null> {
+  public async findByEmail(email: string) {
     const user = this.users.find(user => user.email === email);
 
     if (!user) {
@@ -28,7 +28,7 @@ export class InMemoryUsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findById(id: string): Promise<IUser | null> {
+  public async findById(id: string) {
     const user = this.users.find(user => user.id === id);
 
     if (!user) {
