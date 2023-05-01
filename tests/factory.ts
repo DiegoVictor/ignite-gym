@@ -34,7 +34,7 @@ factory.define('User', {
 
 factory.define('Gym', {
   id: faker.datatype.uuid,
-  title: faker.company.name,
+  name: faker.company.name,
   description: faker.lorem.sentence,
   phone: faker.phone.number,
   latitude: faker.address.latitude,
