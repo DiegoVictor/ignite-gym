@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { IGymsRepository } from '../gyms-repository';
 import { IGym } from '@/contracts/gym';
+import { PAGINATION_LIMIT } from '@/utils/constants';
 
 export class InMemoryGymsRepository implements IGymsRepository {
   public gyms: IGym[] = [];
@@ -28,5 +29,11 @@ export class InMemoryGymsRepository implements IGymsRepository {
       return null;
     }
     return gym;
+  }
+
+  public async searchMany(query: string, page = 1) {
+    return this.gyms
+      .filter(gym => gym.name.includes(query))
+      .slice((page - 1) * PAGINATION_LIMIT, page * PAGINATION_LIMIT);
   }
 }
