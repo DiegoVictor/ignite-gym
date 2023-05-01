@@ -53,4 +53,12 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
 
     return checkIns;
   }
+
+  async countByUserId(userId: string): Promise<number> {
+    return prisma.checkin.count({
+      where: {
+        user_id: userId,
+      },
+    });
+  }
 }
