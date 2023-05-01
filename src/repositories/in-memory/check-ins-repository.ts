@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 
 import { ICheckIn } from '@/contracts/check-in';
 import { ICheckInsRepository } from '../check-ins-repository';
+import { PAGINATION_LIMIT } from '@/utils/constants';
 
 export class InMemoryCheckInsRepository implements ICheckInsRepository {
   public checkIns: ICheckIn[] = [];
@@ -38,5 +39,11 @@ export class InMemoryCheckInsRepository implements ICheckInsRepository {
     }
 
     return checkIn;
+  }
+
+  public async findManyByUserId(userId: string, page = 1) {
+    return this.checkIns
+      .filter(checkIn => checkIn.user_id === userId)
+      .slice((page - 1) * PAGINATION_LIMIT, page * PAGINATION_LIMIT);
   }
 }

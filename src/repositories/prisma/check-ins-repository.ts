@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { prisma } from '@/lib/prisma';
 import { ICheckInsRepository } from '../check-ins-repository';
 import { ICheckIn } from '@/contracts/check-in';
+import { PAGINATION_LIMIT } from '@/utils/constants';
 
 export class PrismaCheckInsRepository implements ICheckInsRepository {
   async create(data: Prisma.CheckinUncheckedCreateInput) {
@@ -36,5 +37,20 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
     }
 
     return checkIn;
+  }
+
+  async findManyByUserId(userId: string, page: number): Promise<ICheckIn[]> {
+    const checkIns = await prisma.checkin.findMany({
+      where: {
+        user_id: userId,
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      take: PAGINATION_LIMIT,
+      skip: (page - 1) * PAGINATION_LIMIT,
+    });
+
+    return checkIns;
   }
 }
