@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { faker } from '@faker-js/faker';
 
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/check-ins-repository';
-import { faker } from '@faker-js/faker';
 import { FetchUserCheckInsHistoryUseCase } from './fetch-user-check-ins-history';
 import { PAGINATION_LIMIT } from '@/utils/constants';
 
@@ -33,7 +33,7 @@ describe('Fetch User Check Ins History Use Case', () => {
       userId,
     });
 
-    expect(checkIns).toHaveLength(2);
+    expect(checkIns).toHaveLength(gymIds.length);
     expect(checkIns).toEqual(
       gymIds.map(gymId =>
         expect.objectContaining({
