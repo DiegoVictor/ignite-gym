@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { IGymsRepository } from '../gyms-repository';
-import { IGym } from '@/contracts/gym';
+import { IGym, IFindManyNearByParams, IGymsRepository } from '@/contracts/gym';
 import { PAGINATION_LIMIT } from '@/utils/constants';
 
 export class InMemoryGymsRepository implements IGymsRepository {

@@ -1,8 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import dayjs from 'dayjs';
 
-import { ICheckIn } from '@/contracts/check-in';
-import { ICheckInsRepository } from '../check-ins-repository';
+import { ICheckIn, ICheckInsRepository } from '@/contracts/check-in';
 import { PAGINATION_LIMIT } from '@/utils/constants';
 
 export class InMemoryCheckInsRepository implements ICheckInsRepository {
