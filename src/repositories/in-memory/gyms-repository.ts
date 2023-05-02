@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto';
 
 import { IGym, IFindManyNearByParams, IGymsRepository } from '@/contracts/gym';
-import { PAGINATION_LIMIT } from '@/utils/constants';
+import {
+  GYMS_NEARBY_MAX_DISTANCE_IN_KM,
+  PAGINATION_LIMIT,
+} from '@/utils/constants';
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates';
 
 export class InMemoryGymsRepository implements IGymsRepository {
   public gyms: IGym[] = [];
@@ -28,6 +32,17 @@ export class InMemoryGymsRepository implements IGymsRepository {
       return null;
     }
     return gym;
+  }
+
+  public async findManyNearby(params: IFindManyNearByParams) {
+    return this.gyms.filter(gym => {
+      const distance = getDistanceBetweenCoordinates(params, {
+        latitude: gym.latitude,
+        longitude: gym.longitude,
+      });
+
+      return distance < GYMS_NEARBY_MAX_DISTANCE_IN_KM;
+    });
   }
 
   public async searchMany(query: string, page = 1) {

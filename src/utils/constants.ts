@@ -1,1 +1,3 @@
 export const PAGINATION_LIMIT = 20;
+
+export const GYMS_NEARBY_MAX_DISTANCE_IN_KM = 10;
