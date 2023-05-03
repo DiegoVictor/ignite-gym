@@ -1,5 +1,4 @@
-import { IUsersRepository } from '@/repositories/users-repository';
-import { IUser } from '@/contracts/user';
+import { IUser, IUsersRepository } from '@/contracts/user';
 import { NotFound } from './errors/not-found';
 
 interface IGetUserProfileUseCaseRequest {

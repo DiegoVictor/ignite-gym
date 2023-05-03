@@ -1,8 +1,7 @@
 import { compare } from 'bcryptjs';
 
-import { IUsersRepository } from '@/repositories/users-repository';
 import { InvalidCredentials } from './errors/invalid-credentials';
-import { IUser } from '@/contracts/user';
+import { IUser, IUsersRepository } from '@/contracts/user';
 
 interface IAuthenticateUseCaseRequest {
   email: string;

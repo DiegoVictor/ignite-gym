@@ -1,10 +1,9 @@
-import { ICheckInsRepository } from '@/repositories/check-ins-repository';
-import { ICheckIn } from '@/contracts/check-in';
-import { IGymsRepository } from '@/repositories/gyms-repository';
+import { ICheckIn, ICheckInsRepository } from '@/contracts/check-in';
 import { NotFound } from './errors/not-found';
 import { MaxNumberOfCheckIns } from './errors/max-number-of-check-ins';
 import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates';
 import { MaxDistanceCheckIn } from './errors/max-distance-check-in';
+import { IGymsRepository } from '@/contracts/gym';
 
 interface ICheckInUseCaseRequest {
   userId: string;

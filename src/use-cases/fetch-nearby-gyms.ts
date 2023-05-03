@@ -1,5 +1,4 @@
-import { IGym } from '@/contracts/gym';
-import { IGymsRepository } from '@/repositories/gyms-repository';
+import { IGym, IGymsRepository } from '@/contracts/gym';
 
 interface IFetchNearbyGymsRequest {
   latitude: number;

@@ -1,5 +1,4 @@
-import { ICheckInsRepository } from '@/repositories/check-ins-repository';
-import { ICheckIn } from '@/contracts/check-in';
+import { ICheckIn, ICheckInsRepository } from '@/contracts/check-in';
 
 interface IFetchUserCheckInsHistoryUseCaseRequest {
   userId: string;

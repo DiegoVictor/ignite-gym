@@ -1,4 +1,4 @@
-import { ICheckInsRepository } from '@/repositories/check-ins-repository';
+import { ICheckInsRepository } from '@/contracts/check-in';
 
 interface IGetUserMetricsUseCaseRequest {
   userId: string;

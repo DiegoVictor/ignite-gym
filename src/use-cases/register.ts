@@ -1,8 +1,7 @@
 import { hash } from 'bcryptjs';
 
-import { IUsersRepository } from '@/repositories/users-repository';
 import { UserAlreadyExists } from './errors/user-already-exists';
-import { IUser } from '@/contracts/user';
+import { IUser, IUsersRepository } from '@/contracts/user';
 
 type IRegisterUserRequest = IUser;
 
