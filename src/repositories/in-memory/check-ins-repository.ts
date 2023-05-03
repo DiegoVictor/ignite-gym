@@ -12,11 +12,21 @@ export class InMemoryCheckInsRepository implements ICheckInsRepository {
       id: randomUUID(),
       gym_id: data.gym_id,
       user_id: data.user_id,
-      validated_at: data.validated_at ? new Date(data.validated_at) : null,
+      validated_at: null,
       created_at: new Date(),
     };
 
     this.checkIns.push(checkIn);
+
+    return checkIn;
+  }
+
+  public async findById(id: string) {
+    const checkIn = this.checkIns.find(checkIn => checkIn.id === id);
+
+    if (!checkIn) {
+      return null;
+    }
 
     return checkIn;
   }
@@ -48,5 +58,15 @@ export class InMemoryCheckInsRepository implements ICheckInsRepository {
 
   public async countByUserId(userId: string) {
     return this.checkIns.filter(checkIn => checkIn.user_id === userId).length;
+  }
+
+  public async save(checkIn: ICheckIn) {
+    const checkInIndex = this.checkIns.findIndex(({ id }) => checkIn.id === id);
+
+    if (checkInIndex >= 0) {
+      this.checkIns[checkInIndex] = checkIn;
+    }
+
+    return checkIn;
   }
 }
