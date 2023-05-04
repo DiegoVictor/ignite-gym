@@ -7,6 +7,7 @@ import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
 import { ValidateCheckInUseCase } from './validate-check-in';
 import { NotFound } from './errors/not-found';
+import { LateCheckInValidation } from './errors/late-check-in-validation';
 
 type IRequiredGym = Required<IGym>;
 
@@ -28,8 +29,6 @@ describe('Validate Check In Use Case', () => {
   it('should be able to validate the check-in', async () => {
     const gymId = faker.datatype.uuid();
     const userId = faker.datatype.uuid();
-
-    // vi.setSystemTime(new Date(2023, 5, 27, 10, 39, 0, 0));
 
     const { id, created_at } = await repository.create({
       gym_id: gymId,
@@ -64,5 +63,26 @@ describe('Validate Check In Use Case', () => {
         checkInId,
       })
     ).rejects.toThrow(NotFound);
+  });
+
+  it('should not be able to validate the check-in after 20 minutes of its cration', async () => {
+    const gymId = faker.datatype.uuid();
+    const userId = faker.datatype.uuid();
+
+    vi.setSystemTime(new Date(2023, 6, 3, 18, 4, 0, 0));
+
+    const { id } = await repository.create({
+      gym_id: gymId,
+      user_id: userId,
+    });
+
+    const twentyMinutesInMiliseconds = 1000 * 60 * 21;
+    vi.advanceTimersByTime(twentyMinutesInMiliseconds);
+
+    await expect(async () =>
+      validateCheckInUseCase.execute({
+        checkInId: id,
+      })
+    ).rejects.toThrow(LateCheckInValidation);
   });
 });
