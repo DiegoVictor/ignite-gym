@@ -31,10 +31,6 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
       },
     });
 
-    if (!checkIn) {
-      return null;
-    }
-
     return checkIn;
   }
 
