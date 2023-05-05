@@ -14,6 +14,14 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
     return checkIn;
   }
 
+  async findById(id: string) {
+    const checkIn = await prisma.checkin.findUnique({
+      where: { id },
+    });
+
+    return checkIn;
+  }
+
   async findByUserIdOnDate(
     userId: string,
     date: Date
@@ -55,5 +63,16 @@ export class PrismaCheckInsRepository implements ICheckInsRepository {
         user_id: userId,
       },
     });
+  }
+
+  async save(checkIn: ICheckIn) {
+    await prisma.checkin.update({
+      where: {
+        id: checkIn.id,
+      },
+      data: checkIn,
+    });
+
+    return checkIn;
   }
 }
