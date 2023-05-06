@@ -14,7 +14,16 @@ export async function authenticate(
   const { email, password } = schema.parse(request.body);
 
   const authenticateUserUseCase = makeAuthenticateUseCase();
-  await authenticateUserUseCase.execute({ email, password });
+  const { user } = await authenticateUserUseCase.execute({ email, password });
 
-  return reply.status(200).send();
+  const token = await reply.jwtSign(
+    {},
+    {
+      sub: user.id,
+    }
+  );
+
+  return reply.status(200).send({
+    token,
+  });
 }
