@@ -7,5 +7,6 @@ export default defineConfig({
     coverage: {
       reportsDirectory: 'tests/coverage',
     },
+    environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
   },
 });
