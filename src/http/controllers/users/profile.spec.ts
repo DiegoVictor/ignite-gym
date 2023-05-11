@@ -2,8 +2,7 @@ import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { app } from '@/app';
-import { IUser } from '@/contracts/user';
-import { factory } from 'tests/factory';
+import { createUserAndAuthenticate } from 'tests/jwt';
 
 describe('Profile Controller', () => {
   beforeAll(async () => {
@@ -15,16 +14,7 @@ describe('Profile Controller', () => {
   });
 
   it('should be able to get user profile', async () => {
-    const { email, name, password } = factory.attrs<IUser>('User');
-
-    await request(app.server).post('/users').send({ email, name, password });
-
-    const {
-      body: { token },
-    } = await request(app.server).post('/sessions').send({
-      email,
-      password,
-    });
+    const { token, email, name } = await createUserAndAuthenticate(app);
 
     const response = await request(app.server)
       .get('/me')
@@ -35,7 +25,7 @@ describe('Profile Controller', () => {
       id: expect.any(String),
       email,
       name,
-      created_at: expect.any(Date),
+      created_at: expect.any(String),
     });
   });
 });
