@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { app } from '@/app';
 import { createUserAndAuthenticate } from 'tests/jwt';
+import { USER_ROLE } from '@/contracts/user';
 
 describe('Profile Controller', () => {
   beforeAll(async () => {
@@ -25,6 +26,7 @@ describe('Profile Controller', () => {
       id: expect.any(String),
       email,
       name,
+      role: USER_ROLE.MEMBER,
       created_at: expect.any(String),
     });
   });
