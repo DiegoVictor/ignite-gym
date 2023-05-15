@@ -1,12 +1,22 @@
 import request from 'supertest';
 import { FastifyInstance } from 'fastify';
+import { hash } from 'bcryptjs';
 
 import { factory } from './factory';
-import { IUser } from '@/contracts/user';
+import { IUser, USER_ROLE } from '@/contracts/user';
+import { prisma } from '@/lib/prisma';
 
-async function createUser(app: FastifyInstance) {
+async function createUser(app: FastifyInstance, role = USER_ROLE.MEMBER) {
   const { email, name, password } = factory.attrs<IUser>('User');
 
+  await prisma.user.create({
+    data: {
+      email,
+      name,
+      password: await hash(password, 6),
+      role,
+    },
+  });
   await request(app.server).post('/users').send({ email, name, password });
 
   return {
@@ -31,8 +41,11 @@ export async function authenticate(
   return token;
 }
 
-export async function createUserAndAuthenticate(app: FastifyInstance) {
-  const { email, name, password } = await createUser(app);
+export async function createUserAndAuthenticate(
+  app: FastifyInstance,
+  role = USER_ROLE.MEMBER
+) {
+  const { email, name, password } = await createUser(app, role);
   const token = await authenticate(app, email, password);
 
   return { token, email, name };
