@@ -7,7 +7,7 @@ import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
 import { prisma } from '@/lib/prisma';
 import { hash } from 'bcryptjs';
-import { IUser } from '@/contracts/user';
+import { IUser, USER_ROLE } from '@/contracts/user';
 
 describe('Validate Check-In Controller', () => {
   beforeAll(async () => {
@@ -29,6 +29,7 @@ describe('Validate Check-In Controller', () => {
           data: {
             ...user,
             password,
+            role: USER_ROLE.ADMIN,
           },
         })
       ),

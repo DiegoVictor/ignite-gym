@@ -5,6 +5,7 @@ import { app } from '@/app';
 import { createUserAndAuthenticate } from 'tests/jwt';
 import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
+import { USER_ROLE } from '@/contracts/user';
 
 describe('Search Gyms Controller', () => {
   beforeAll(async () => {
@@ -16,7 +17,7 @@ describe('Search Gyms Controller', () => {
   });
 
   it('should be able to search gyms by name', async () => {
-    const { token } = await createUserAndAuthenticate(app);
+    const { token } = await createUserAndAuthenticate(app, USER_ROLE.ADMIN);
 
     const gyms = Array.from({ length: 3 }, () => factory.attrs<IGym>('Gym'));
 

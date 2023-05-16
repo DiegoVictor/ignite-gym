@@ -5,6 +5,7 @@ import { app } from '@/app';
 import { createUserAndAuthenticate } from 'tests/jwt';
 import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
+import { USER_ROLE } from '@/contracts/user';
 
 describe('Create Gym Controller', () => {
   beforeAll(async () => {
@@ -16,7 +17,7 @@ describe('Create Gym Controller', () => {
   });
 
   it('should be able to create a gym', async () => {
-    const { token } = await createUserAndAuthenticate(app);
+    const { token } = await createUserAndAuthenticate(app, USER_ROLE.ADMIN);
     const { name, description, latitude, longitude, phone } =
       factory.attrs<IGym>('Gym');
 
