@@ -6,10 +6,10 @@
     "dev:server": "tsx watch src/server.ts",
     "build": "tsup src --out-dir build",
     "start": "node build/server.js",
-    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test": "vitest run --dir src/use-cases --coverage",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
-    "test": "vitest run --dir src/use-cases --coverage",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "test:e2e": "vitest run --dir src/http",
     "test:e2e:watch": "vitest --dir src/http",
     "test:watch": "vitest--dir src/use-cases"
