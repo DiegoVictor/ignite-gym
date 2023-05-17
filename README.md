@@ -1,4 +1,4 @@
-# [API] Be The Hero
+# Ignite Gym
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/DiegoVictor/ignite-gym/config.yml?logo=github&style=flat-square)](https://github.com/DiegoVictor/ignite-gym/actions)
 ![prisma](https://img.shields.io/static/v1?label=prisma&message=4.13.0&color=2d3748&logo=prisma&style=flat-square)
 [![eslint](https://img.shields.io/badge/eslint-8.38.0-4b32c3?style=flat-square&logo=eslint)](https://eslint.org/)
