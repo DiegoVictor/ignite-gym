@@ -21,4 +21,15 @@ Allow users to register themselves as admin or members, allow admin users to cre
     * [Requests](#requests)
 * [Running the tests](#running-the-tests)
 
+# Installing
+Easy peasy lemon squeezy:
+```
+$ yarn
+```
+Or:
+```
+$ npm install
+```
+> Was installed and configured the [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/) to keep the code clean and patterned.
+
 
