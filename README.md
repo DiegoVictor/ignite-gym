@@ -32,4 +32,33 @@ $ npm install
 ```
 > Was installed and configured the [`eslint`](https://eslint.org/) and [`prettier`](https://prettier.io/) to keep the code clean and patterned.
 
+## Configuring
+The application uses just one database: [Postgres](https://www.postgresql.org/).
+
+### Postgres
+Responsible to store all application data. If for any reason you would like to create a Postgres container instead of use `docker-compose`, you can do it by running the following command:
+```
+$ docker run --name ignite-gym-postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+```
+
+#### Migrations
+Remember to run the database migrations:
+```
+$ yarn ts-node-dev ./node_modules/typeorm/cli.js migration:run
+```
+Or:
+```
+$ yarn typeorm migration:run
+```
+> See more information on [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate).
+
+### .env
+In this file you may configure your JWT settings, the environment, app's port and database connection Url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
+
+|key|description|default
+|---|---|---
+|PORT|Port number where the app will run.|`3333`
+|NODE_ENV|App environment.|`dev`
+|JWT_SECRET|A alphanumeric random string. Used to create signed tokens.| -
+|DATABASE_URL| Database connection Url.|`postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public`
 
