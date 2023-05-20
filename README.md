@@ -141,3 +141,22 @@ Request body:
 	"longitude": "43.0377"
 }
 ```
+
+# Running the tests
+[Vitest](https://vitest.dev/) was the choice to test the app, to run the unit tests:
+```
+$ yarn test:unit
+```
+Or:
+```
+$ npm run test:unit
+```
+And to run the E2E tests:
+```
+$ yarn test:e2e
+```
+Or:
+```
+$ npm run test:e2e
+```
+
