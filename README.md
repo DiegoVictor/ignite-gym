@@ -79,3 +79,65 @@ A few routes expect a Bearer Token in an `Authorization` header.
 POST http://localhost:3333/gyms Authorization: Bearer <token>
 ```
 > Get your token after authenticate through the `/sessions` route, it returns a `token` key with a Bearer Token.
+
+## Routes
+|route|HTTP Method|params|description|auth method
+|:---|:---:|:---:|:---:|:---:
+|`/users`|POST|Body with user `name`, `email` and `password`.|Create new user.|:x:
+|`/sessions`|POST|Body with user `email` and `password`.|Authenticates user and return a Bearer Token.|:x:
+|`/token/refresh`|PATCH|Cookie with the `refreshToken` generate in the sign in (`/sessions`).|Generate a new Bearer Token.|:x:
+|`/me`|GET| - |Get the logged in user profile.|Bearer
+|`/gyms`|POST|Body with gym `name`, `description`, `phone`, `latitude` and `longitude`.|Create a new gym. Only `ADMIN` users are allowed.|Bearer
+|`/gyms/nearby`|GET|Query parameters with user current `latitude` and `longitude`.|Look for gyms nearby of the user.|Bearer
+|`/gyms/search`|GET|Query parameters with `q` (query to use in the search) and optionally `page`.|Search for gyms based in the query provided.|Bearer
+|`/gyms/:gymId/check-ins`|POST|Body with user current `latitude` and `longitude`.|Check in user on a gym.|Bearer
+|`/check-ins/:checkInId/validate`|PATCH| - |Validate an user check-in. Only `ADMIN` users are allowed.|Bearer
+|`/check-ins/history`|GET| - |Return user's check-ins.|Bearer
+|`/check-ins/metrics`|GET| - |Return user's check-ins count.|Bearer
+
+> Routes with `Bearer` as auth method expect an `Authorization` header. See [Bearer Token](#bearer-token) section for more information.
+
+### Requests
+* `POST /users`
+
+Request body:
+```json
+{
+	"name": "John Doe",
+	"email": "johndoe@example.com",
+	"password": "123456"
+}
+```
+
+* `POST /sessions`
+
+Request body:
+```json
+{
+	"email": "diegovictorgonzaga@gmail.com",
+	"password": "123456"
+}
+```
+
+* `POST /gyms`
+
+Request body:
+```json
+{
+	"name": "Ignite Gym",
+	"description": "Gym for Ignite Students",
+	"phone": "8772810274",
+	"latitude": "79.1721",
+	"longitude": "43.0377"
+}
+```
+
+* `POST /gyms/:gymId/check-ins`
+
+Request body:
+```json
+{
+	"latitude": "79.1721",
+	"longitude": "43.0377"
+}
+```
