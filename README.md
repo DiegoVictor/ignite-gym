@@ -72,3 +72,10 @@ Or:
 npm run dev:server
 ```
 
+## Bearer Token
+A few routes expect a Bearer Token in an `Authorization` header.
+> You can see these routes in the [routes](#routes) section.
+```
+POST http://localhost:3333/gyms Authorization: Bearer <token>
+```
+> Get your token after authenticate through the `/sessions` route, it returns a `token` key with a Bearer Token.
