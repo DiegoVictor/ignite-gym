@@ -5,7 +5,7 @@
 [![vitest](https://img.shields.io/badge/jest-0.30.1-brightgreen?style=flat-square&logo=vitest)](https://vitest.dev/)
 [![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](https://raw.githubusercontent.com/DiegoVictor/ignite-gym/main/LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)<br>
-[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Ignite%20Gym&uri=https%3A%2F%2Fraw.githubusercontent.com%2FDiegoVictor%2Fignite-gym%2Fmain%2FInsomnia_2023-05-05.json)
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Ignite%20Gym&uri=https%3A%2F%2Fraw.githubusercontent.com%2FDiegoVictor%2Fignite-gym%2Fmain%2FInsomnia_2023-05-19.json)
 
 Allow users to register themselves as admin or members, allow admin users to create gyms and validate check-ins. Allow members to check-in, get their profile, search/fetch gyms. and much more! The app has pagination and use JWT to authentication.
 
