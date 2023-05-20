@@ -62,3 +62,13 @@ In this file you may configure your JWT settings, the environment, app's port an
 |JWT_SECRET|A alphanumeric random string. Used to create signed tokens.| -
 |DATABASE_URL| Database connection Url.|`postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public`
 
+# Usage
+To start up the app run:
+```
+$ yarn dev:server
+```
+Or:
+```
+npm run dev:server
+```
+
