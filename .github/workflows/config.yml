@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Run Unit Tests
-        run: npm run test
+        run: npm run test:unit
 
   e2e-tests:
     if: github.event.pull_request.merged == true
