@@ -26,6 +26,9 @@ jobs:
       - name: Run Unit Tests
         run: npm run test:unit
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+
   e2e-tests:
     if: github.event.pull_request.merged == true
     name: E2E Tests
@@ -57,3 +60,6 @@ jobs:
           PORT: 3333
           JWT_SECRET: testing
           DATABASE_URL: "postgresql://postgres:docker@localhost:5432/ignite-gym?schema=public"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
