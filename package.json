@@ -9,6 +9,8 @@
     "test:unit": "vitest run --dir src/use-cases --coverage",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "pretest": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test": "vitest run --coverage",
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "test:e2e": "vitest run --dir src/http --coverage",
     "test:e2e:watch": "vitest --dir src/http",
