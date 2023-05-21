@@ -21,6 +21,7 @@ Allow users to register themselves as admin or members, allow admin users to cre
   * [Routes](#routes)
     * [Requests](#requests)
 * [Running the tests](#running-the-tests)
+  * [Coverage report](#coverage-report)
 
 # Installing
 Easy peasy lemon squeezy:
