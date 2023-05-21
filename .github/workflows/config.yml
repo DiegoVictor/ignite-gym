@@ -4,9 +4,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    types:
-      - opened
-      - edited
+    branches:
+      - main
 
 jobs:
   unit-tests:
@@ -31,7 +30,7 @@ jobs:
         uses: codecov/codecov-action@v3
 
   e2e-tests:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request
     name: E2E Tests
     runs-on: ubuntu-latest
     services:
