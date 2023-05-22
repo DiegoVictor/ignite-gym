@@ -42,4 +42,19 @@ describe('Create Check-In Controller', () => {
 
     expect(response.statusCode).toBe(201);
   });
+
+  it('should not be able to check in on a non existing gym', async () => {
+    const { token } = await createUserAndAuthenticate(app);
+    const { id, latitude, longitude } = factory.attrs<IGym>('Gym');
+
+    const response = await request(app.server)
+      .post(`/gyms/${id}/check-ins`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        latitude,
+        longitude,
+      });
+
+    expect(response.statusCode).toBe(404);
+  });
 });

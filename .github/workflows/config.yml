@@ -4,9 +4,8 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    types:
-      - opened
-      - edited
+    branches:
+      - main
 
 jobs:
   unit-tests:
@@ -30,9 +29,9 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
-  e2e-tests:
-    if: github.event.pull_request.merged == true
-    name: E2E Tests
+  tests:
+    if: github.event.pull_request
+    name: E2E and Unit Tests
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -55,8 +54,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run E2E Tests
-        run: npm run test:e2e
+      - name: Run E2E and Unit Tests
+        run: npm run test
         env:
           PORT: 3333
           JWT_SECRET: testing
