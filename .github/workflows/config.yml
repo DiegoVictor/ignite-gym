@@ -1,37 +1,10 @@
 name: Pipeline
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  unit-tests:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Run Unit Tests
-        run: npm run test:unit
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-
-  tests:
-    if: github.event.pull_request
-    name: E2E and Unit Tests
+  unit-e2e:
+    name: Unit and E2E Tests
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -54,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run E2E and Unit Tests
+      - name: Run Unit and E2E Tests
         run: npm run test
         env:
           PORT: 3333
