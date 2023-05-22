@@ -160,3 +160,5 @@ Or:
 $ npm run test:e2e
 ```
 
+## Coverage report
+You can see the coverage report inside `tests/coverage`. They are automatically created after the tests run.
