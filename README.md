@@ -114,7 +114,7 @@ Request body:
 Request body:
 ```json
 {
-	"email": "diegovictorgonzaga@gmail.com",
+	"email": "johndoe@example.com",
 	"password": "123456"
 }
 ```
