@@ -46,11 +46,7 @@ $ docker run --name ignite-gym-postgres -e POSTGRES_PASSWORD=docker -p 5432:5432
 #### Migrations
 Remember to run the database migrations:
 ```
-$ yarn ts-node-dev ./node_modules/typeorm/cli.js migration:run
-```
-Or:
-```
-$ yarn typeorm migration:run
+$ npx prisma migrate dev
 ```
 > See more information on [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate).
 
