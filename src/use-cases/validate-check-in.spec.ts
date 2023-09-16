@@ -27,8 +27,8 @@ describe('Validate Check In Use Case', () => {
   });
 
   it('should be able to validate the check-in', async () => {
-    const gymId = faker.datatype.uuid();
-    const userId = faker.datatype.uuid();
+    const gymId = faker.string.uuid();
+    const userId = faker.string.uuid();
 
     const { id, created_at } = await repository.create({
       gym_id: gymId,
@@ -56,7 +56,7 @@ describe('Validate Check In Use Case', () => {
   });
 
   it('should not be able to validate an existent check-in', async () => {
-    const checkInId = faker.datatype.uuid();
+    const checkInId = faker.string.uuid();
 
     await expect(async () =>
       validateCheckInUseCase.execute({
@@ -66,8 +66,8 @@ describe('Validate Check In Use Case', () => {
   });
 
   it('should not be able to validate the check-in after 20 minutes of its cration', async () => {
-    const gymId = faker.datatype.uuid();
-    const userId = faker.datatype.uuid();
+    const gymId = faker.string.uuid();
+    const userId = faker.string.uuid();
 
     vi.setSystemTime(new Date(2023, 6, 3, 18, 4, 0, 0));
 

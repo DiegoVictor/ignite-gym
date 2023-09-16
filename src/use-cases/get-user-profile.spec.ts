@@ -41,7 +41,7 @@ describe('Get User Profile Use Case', () => {
   it('should not be able to get user profile for a wrong id', async () => {
     await expect(async () =>
       getUserProfileUseCase.execute({
-        userId: faker.datatype.uuid(),
+        userId: faker.string.uuid(),
       })
     ).rejects.toThrow(NotFound);
   });

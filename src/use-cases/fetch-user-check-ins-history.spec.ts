@@ -17,8 +17,8 @@ describe('Fetch User Check Ins History Use Case', () => {
   });
 
   it('should be able to fetch user check-ins history', async () => {
-    const userId = faker.datatype.uuid();
-    const gymIds = Array.from({ length: 2 }, () => faker.datatype.uuid());
+    const userId = faker.string.uuid();
+    const gymIds = Array.from({ length: 2 }, () => faker.string.uuid());
 
     await Promise.all(
       gymIds.map(gymId =>
@@ -45,9 +45,9 @@ describe('Fetch User Check Ins History Use Case', () => {
   });
 
   it('should be able to fetch paginated check-ins history', async () => {
-    const userId = faker.datatype.uuid();
+    const userId = faker.string.uuid();
     const gymIds = Array.from({ length: PAGINATION_LIMIT + 2 }, () =>
-      faker.datatype.uuid()
+      faker.string.uuid()
     );
 
     await Promise.all(

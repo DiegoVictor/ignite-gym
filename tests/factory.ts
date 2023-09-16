@@ -26,19 +26,19 @@ const factory = {
 };
 
 factory.define('User', {
-  id: faker.datatype.uuid,
-  name: faker.name.fullName,
+  id: faker.string.uuid,
+  name: faker.person.fullName,
   email: faker.internet.email,
   password: faker.internet.password,
 });
 
 factory.define('Gym', {
-  id: faker.datatype.uuid,
+  id: faker.string.uuid,
   name: faker.company.name,
   description: faker.lorem.sentence,
   phone: faker.phone.number,
-  latitude: faker.address.latitude,
-  longitude: faker.address.longitude,
+  latitude: faker.location.latitude,
+  longitude: faker.location.longitude,
 });
 
 export { factory };

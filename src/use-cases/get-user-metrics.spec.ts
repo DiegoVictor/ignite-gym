@@ -14,8 +14,8 @@ describe('Get User Metrics Use Case', () => {
   });
 
   it('should be able to get user metrics', async () => {
-    const userId = faker.datatype.uuid();
-    const gymIds = Array.from({ length: 2 }, () => faker.datatype.uuid());
+    const userId = faker.string.uuid();
+    const gymIds = Array.from({ length: 2 }, () => faker.string.uuid());
 
     await Promise.all(
       gymIds.map(gymId =>

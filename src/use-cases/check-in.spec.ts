@@ -31,7 +31,7 @@ describe('Check In Use Case', () => {
 
   it('should be able to check in', async () => {
     const gym = factory.attrs<IRequiredGym>('Gym');
-    const userId = faker.datatype.uuid();
+    const userId = faker.string.uuid();
 
     await gymsRepository.create(gym);
 
@@ -55,7 +55,7 @@ describe('Check In Use Case', () => {
 
   it('should not be able to check in twice in the same day', async () => {
     const gym = factory.attrs<IRequiredGym>('Gym');
-    const userId = faker.datatype.uuid();
+    const userId = faker.string.uuid();
 
     vi.setSystemTime(new Date(2023, 5, 27, 10, 39, 0, 0));
 
@@ -84,7 +84,7 @@ describe('Check In Use Case', () => {
 
   it('should be able to check in twice in different days', async () => {
     const gym = factory.attrs<IRequiredGym>('Gym');
-    const userId = faker.datatype.uuid();
+    const userId = faker.string.uuid();
 
     vi.setSystemTime(new Date(2023, 5, 26, 10, 39, 0, 0));
 
@@ -120,16 +120,16 @@ describe('Check In Use Case', () => {
   });
 
   it('should not be able to find the gym', async () => {
-    const gymId = faker.datatype.uuid();
-    const userId = faker.datatype.uuid();
+    const gymId = faker.string.uuid();
+    const userId = faker.string.uuid();
 
     await expect(async () =>
       checkInUseCase.execute({
         gymId,
         userId,
         user: {
-          latitude: Number(faker.address.latitude()),
-          longitude: Number(faker.address.longitude()),
+          latitude: Number(faker.location.latitude()),
+          longitude: Number(faker.location.longitude()),
         },
       })
     ).rejects.toThrow(NotFound);
@@ -137,7 +137,7 @@ describe('Check In Use Case', () => {
 
   it('should not be able to check in on a distant gym', async () => {
     const gym = factory.attrs<IRequiredGym>('Gym');
-    const userId = faker.datatype.uuid();
+    const userId = faker.string.uuid();
 
     gymsRepository.gyms.push({
       ...gym,
