@@ -27,7 +27,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
+    "@faker-js/faker": "^8.0.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/node": "^18.14.6",
     "@types/supertest": "^2.0.12",
