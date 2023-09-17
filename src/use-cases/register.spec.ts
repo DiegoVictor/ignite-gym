@@ -3,7 +3,7 @@ import { compare } from 'bcryptjs';
 
 import { RegisterUserUseCase } from './register';
 import { factory } from '@/../tests/factory';
-import { IUser } from '@/contracts/user';
+import { IUser, USER_ROLE } from '@/contracts/user';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/users-repository';
 import { UserAlreadyExists } from './errors/user-already-exists';
 
@@ -30,6 +30,7 @@ describe('Register Use Case', () => {
       name,
       email,
       password: expect.any(String),
+      role: USER_ROLE.MEMBER,
     });
   });
 

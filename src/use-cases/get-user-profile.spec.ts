@@ -3,7 +3,7 @@ import { hash } from 'bcryptjs';
 import { faker } from '@faker-js/faker';
 
 import { factory } from '@/../tests/factory';
-import { IUser } from '@/contracts/user';
+import { IUser, USER_ROLE } from '@/contracts/user';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/users-repository';
 import { GetUserProfileUseCase } from './get-user-profile';
 import { NotFound } from './errors/not-found';
@@ -35,6 +35,7 @@ describe('Get User Profile Use Case', () => {
       name,
       email,
       password: expect.any(String),
+      role: USER_ROLE.MEMBER,
     });
   });
 
