@@ -2,14 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/check-ins-repository';
 import { faker } from '@faker-js/faker';
-import { MaxNumberOfCheckIns } from './errors/max-number-of-check-ins';
-import { factory } from 'tests/factory';
-import { IGym } from '@/contracts/gym';
 import { ValidateCheckInUseCase } from './validate-check-in';
 import { NotFound } from './errors/not-found';
 import { LateCheckInValidation } from './errors/late-check-in-validation';
-
-type IRequiredGym = Required<IGym>;
 
 let repository: InMemoryCheckInsRepository;
 let validateCheckInUseCase: ValidateCheckInUseCase;
