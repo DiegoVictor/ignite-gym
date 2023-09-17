@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
 import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { Environment } from 'vitest';
 
-function generateDatabaseUrl(schema: string) {
+function generateDatabaseUrl(schema) {
   if (!process.env.DATABASE_URL) {
     throw new Error(
       'DATABASE_URL environment variable should at least has an initial value'
@@ -17,8 +16,9 @@ function generateDatabaseUrl(schema: string) {
   return url.toString();
 }
 
-export default <Environment>{
+export default {
   name: 'prisma',
+  transformMode: 'ssr',
   async setup() {
     const schema = randomUUID();
     const databaseUrl = generateDatabaseUrl(schema);
