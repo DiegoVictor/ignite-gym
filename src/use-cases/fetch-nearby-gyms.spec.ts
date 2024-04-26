@@ -21,13 +21,21 @@ describe('Fetch Nearby Gyms Use Case', () => {
     const [nearGym] = await Promise.all([
       repository.create({
         ...gym,
-        latitude: Number(faker.location.latitude(90, 80, 5)),
-        longitude: Number(faker.location.longitude(90, 80, 5)),
+        latitude: Number(
+          faker.location.latitude({ max: 90, min: 80, precision: 5 })
+        ),
+        longitude: Number(
+          faker.location.longitude({ max: 90, min: 80, precision: 5 })
+        ),
       }),
       repository.create({
         ...gym,
-        latitude: Number(faker.location.latitude(10, -10, 5)),
-        longitude: Number(faker.location.longitude(10, -10, 5)),
+        latitude: Number(
+          faker.location.latitude({ max: 10, min: -10, precision: 5 })
+        ),
+        longitude: Number(
+          faker.location.longitude({ max: 10, min: -10, precision: 5 })
+        ),
       }),
     ]);
 
