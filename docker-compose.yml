@@ -3,6 +3,7 @@ version: '3.9'
 services:
   pg:
     image: bitnami/postgresql
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
