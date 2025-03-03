@@ -15,9 +15,9 @@ Allow users to register themselves as admin or members, allow admin users to cre
 ## Table of Contents
 * [Installing](#installing)
   * [Configuring](#configuring)
+    * [.env](#env)
     * [Postgres](#postgres)
       * [Migrations](#migrations)
-    * [.env](#env)
 * [Usage](#usage)
   * [Bearer Token](#bearer-token)
   * [Routes](#routes)
@@ -39,6 +39,16 @@ $ npm install
 ## Configuring
 The application uses just one database: [Postgres](https://www.postgresql.org/).
 
+### .env
+In this file you may configure your JWT settings, the environment, app's port and database connection Url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
+
+|key|description|default
+|---|---|---
+|PORT|Port number where the app will run.|`3333`
+|NODE_ENV|App environment.|`dev`
+|JWT_SECRET|A alphanumeric random string. Used to create signed tokens.| -
+|DATABASE_URL| Database connection Url.|`postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public`
+
 ### Postgres
 Responsible to store all application data. If for any reason you would like to create a Postgres container instead of use `docker-compose`, you can do it by running the following command:
 ```
@@ -51,16 +61,6 @@ Remember to run the database migrations:
 $ npx prisma migrate dev
 ```
 > See more information on [Prisma Migrate](https://www.prisma.io/docs/concepts/components/prisma-migrate).
-
-### .env
-In this file you may configure your JWT settings, the environment, app's port and database connection Url. Rename the `.env.example` in the root directory to `.env` then just update with your settings.
-
-|key|description|default
-|---|---|---
-|PORT|Port number where the app will run.|`3333`
-|NODE_ENV|App environment.|`dev`
-|JWT_SECRET|A alphanumeric random string. Used to create signed tokens.| -
-|DATABASE_URL| Database connection Url.|`postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public`
 
 # Usage
 To start up the app run:
