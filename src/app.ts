@@ -30,7 +30,7 @@ app.setErrorHandler((err, _, reply) => {
   if (err instanceof ZodError) {
     return reply.status(400).send({
       message: 'Validation Error',
-      issues: err.format(),
+      issues: err.issues,
     });
   }
 
