@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { FastifyInstance } from 'fastify';
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 
 import { factory } from './factory';
 import { IUser, USER_ROLE } from '@/contracts/user';

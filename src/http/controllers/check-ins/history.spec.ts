@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 
 import { app } from '@/app';
 import { authenticate } from 'tests/jwt';

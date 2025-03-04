@@ -1,4 +1,4 @@
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 
 import { UserAlreadyExists } from './errors/user-already-exists';
 import { IUser, IUsersRepository } from '@/contracts/user';

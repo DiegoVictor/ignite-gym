@@ -1,4 +1,4 @@
-import { compare } from 'bcryptjs';
+import { compare } from 'bcrypt';
 
 import { InvalidCredentials } from './errors/invalid-credentials';
 import { IUser, IUsersRepository } from '@/contracts/user';

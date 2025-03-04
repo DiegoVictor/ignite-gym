@@ -6,7 +6,7 @@ import { authenticate } from 'tests/jwt';
 import { factory } from 'tests/factory';
 import { IGym } from '@/contracts/gym';
 import { prisma } from '@/lib/prisma';
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 import { IUser, USER_ROLE } from '@/contracts/user';
 
 describe('Validate Check-In Controller', () => {

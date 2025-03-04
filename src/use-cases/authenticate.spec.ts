@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { hash } from 'bcryptjs';
+import { hash } from 'bcrypt';
 import { faker } from '@faker-js/faker';
 
 import { factory } from '@/../tests/factory';

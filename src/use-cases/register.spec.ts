@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { compare } from 'bcryptjs';
+import { compare } from 'bcrypt';
 
 import { RegisterUserUseCase } from './register';
 import { factory } from '@/../tests/factory';
