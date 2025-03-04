@@ -5,7 +5,7 @@ import { makeValidateCheckInUseCase } from '@/use-cases/factory/make-validate-ch
 
 export async function validate(request: FastifyRequest, reply: FastifyReply) {
   const schema = z.object({
-    checkInId: z.string(),
+    checkInId: z.string().uuid(),
   });
 
   const { checkInId } = schema.parse(request.params);
