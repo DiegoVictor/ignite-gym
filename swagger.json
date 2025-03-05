@@ -1,0 +1,947 @@
+{
+  "openapi":"3.0.3",
+  "info": {
+    "title":"Ignite Gym",
+    "version":"1.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://raw.githubusercontent.com/DiegoVictor/ignite-gym/refs/heads/main/LICENSE"
+    }
+  },
+  "servers": [
+    {
+      "url":"https://localhost:3333"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 6
+                  }
+                },
+                "required": ["name", "email", "password"]
+              },
+              "example": {
+                "name": "John Doe",
+                "email": "johndoe@example.com",
+                "password": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateError"
+                },
+                "example": {
+                  "message": "Validation Error",
+                  "issues": [
+                    {
+                      "code": "invalid_type",
+                      "expected": "string",
+                      "received": "undefined",
+                      "path": [
+                        "name"
+                      ],
+                      "message": "Required"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User already exists"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sessions": {
+      "post": {
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 6
+                  }
+                },
+                "required": ["email", "password"]
+              },
+              "example": {
+                "email": "johndoe@example.com",
+                "password": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return a Bearer Token",
+            "headers": {
+              "refreshToken": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiN2I0MmM0ZjItMDY3Yy00NjZiLTk0ZDktYmRiMDJlMjBjZTZhIiwiaWF0IjoxNzQwNTI2NTQ2LCJleHAiOjE3NDExMzEzNDZ9.4nHi3PqR2y4pbfslz69zqQoKuKwATRGAgGrOyKx7O9c; Path=/; HttpOnly; Secure; SameSite=Strict"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiN2I0MmM0ZjItMDY3Yy00NjZiLTk0ZDktYmRiMDJlMjBjZTZhIiwiaWF0IjoxNzQwNTI2NTQ2LCJleHAiOjE3NDA1Mjc0NDZ9.QoWROHbsatvNiLmOLBO6RuQEnenb8cThAfNgGUChpjw"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ValidateError"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Invalid credentials": {
+                    "value": {
+                      "message": "Invalid credentials"
+                    }
+                  },
+                  "ValidationError": {
+                    "value": {
+                      "message": "Validation Error",
+                      "issues": [
+                        {
+                          "code": "invalid_type",
+                          "expected": "string",
+                          "received": "undefined",
+                          "path": [
+                            "email"
+                          ],
+                          "message": "Required"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/token/refresh": {
+      "patch": {
+        "tags": ["Auth"],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return a Bearer Token",
+            "headers": {
+              "refreshToken": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiN2I0MmM0ZjItMDY3Yy00NjZiLTk0ZDktYmRiMDJlMjBjZTZhIiwiaWF0IjoxNzQwNjE4ODkxLCJleHAiOjE3NDEyMjM2OTF9.MWG3kiX19w14HwaUaihfQ83GCu2WakhoUStFVN8hXOs; Path=/; HttpOnly; Secure; SameSite=Strict"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiTUVNQkVSIiwic3ViIjoiN2I0MmM0ZjItMDY3Yy00NjZiLTk0ZDktYmRiMDJlMjBjZTZhIiwiaWF0IjoxNzQwNjE4ODkxLCJleHAiOjE3NDA2MTk3OTF9.w6JjdHyg1JmLpkUy9s-skAAPyQ0yEWzkvYqhIWu4KMY"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the logged in user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["MEMBER", "ADMIN"]
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "example": {
+                  "profile": {
+                    "id": "7b42c4f2-067c-466b-94d9-bdb02e20ce6a",
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "role": "MEMBER",
+                    "created_at": "2025-02-25T22:46:14.773Z"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gyms": {
+      "post": {
+        "tags": ["Gyms"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  }
+                },
+                "required": ["name", "latitude", "longitude"]
+              },
+              "example": {
+                "name": "Ignite Gym",
+                "description": "Gym for Ignite Students",
+                "phone": "8772810274",
+                "latitude": "79.1721",
+                "longitude": "43.0377"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateError"
+                },
+                "example": {
+                  "message": "Validation Error",
+                  "issues": [
+                    {
+                      "code": "invalid_type",
+                      "expected": "string",
+                      "received": "undefined",
+                      "path": [
+                        "name"
+                      ],
+                      "message": "Required"
+                    },
+                    {
+                      "code": "invalid_type",
+                      "expected": "number",
+                      "received": "nan",
+                      "path": [
+                        "latitude"
+                      ],
+                      "message": "Expected number, received nan"
+                    },
+                    {
+                      "code": "invalid_type",
+                      "expected": "number",
+                      "received": "nan",
+                      "path": [
+                        "longitude"
+                      ],
+                      "message": "Expected number, received nan"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gyms/nearby": {
+      "get": {
+        "tags": ["Gyms"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Look for gyms nearby of the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "gyms": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Gym"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "gyms": [
+                    {
+                      "id": "26085200-7f81-4891-846a-ad024927ec54",
+                      "name": "Ignite Gym",
+                      "description": "Gym for Ignite Students",
+                      "phone": "8772810274",
+                      "latitude": 79.1721,
+                      "longitude": 43.0377
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateError"
+                },
+                "example": {
+                  "message": "Validation Error",
+                  "issues": [
+                    {
+                      "code": "invalid_type",
+                      "expected": "number",
+                      "received": "nan",
+                      "path": [
+                        "latitude"
+                      ],
+                      "message": "Expected number, received nan"
+                    },
+                    {
+                      "code": "invalid_type",
+                      "expected": "number",
+                      "received": "nan",
+                      "path": [
+                        "longitude"
+                      ],
+                      "message": "Expected number, received nan"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gyms/search": {
+      "get": {
+        "tags": ["Gyms"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search for gyms based in the query provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "gyms": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Gym"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "gyms": [
+                    {
+                      "id": "26085200-7f81-4891-846a-ad024927ec54",
+                      "name": "Ignite Gym",
+                      "description": "Gym for Ignite Students",
+                      "phone": "8772810274",
+                      "latitude": 79.1721,
+                      "longitude": 43.0377
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateError"
+                },
+                "example": {
+                  "message": "Validation Error",
+                  "issues": [
+                    {
+                      "code": "invalid_type",
+                      "expected": "string",
+                      "received": "undefined",
+                      "path": [
+                        "q"
+                      ],
+                      "message": "Required"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gyms/{gymId}/check-ins": {
+      "post": {
+        "tags": ["Check-ins"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "gymId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  }
+                },
+                "required": ["latitude", "longitude"]
+              },
+              "example": {
+                "latitude": 79.1721,
+                "longitude": 43.0377
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Check in user on a gym"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ValidateError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Maximum Distance Check-in": {
+                    "value": {
+                      "message": "Maximum distance from the gym reached"
+                    }
+                  },
+                  "Maximum Number Of Check-ins": {
+                    "value": {
+                      "message": "Maximum number of check-ins reached"
+                    }
+                  },
+                  "Validation Failed": {
+                    "value": {
+                      "message": "Validation Error",
+                      "issues": [
+                        {
+                          "code": "invalid_type",
+                          "expected": "number",
+                          "received": "nan",
+                          "path": [
+                            "latitude"
+                          ],
+                          "message": "Expected number, received nan"
+                        },
+                        {
+                          "code": "invalid_type",
+                          "expected": "number",
+                          "received": "nan",
+                          "path": [
+                            "longitude"
+                          ],
+                          "message": "Expected number, received nan"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gym Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-ins/history": {
+      "get": {
+        "tags": ["Check-ins"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get the logged in user check-ins history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "checkIns": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "title": "Check-in",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "validated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "user_id": {
+                            "type": "string"
+                          },
+                          "gym_id": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "checkIns": [
+                    {
+                      "id": "29c47d71-03c6-4850-8a3b-c3bd96e0fd9d",
+                      "validated_at": null,
+                      "created_at": "2025-03-01T14:46:50.604Z",
+                      "user_id": "7b42c4f2-067c-466b-94d9-bdb02e20ce6a",
+                      "gym_id": "26085200-7f81-4891-846a-ad024927ec54"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateError"
+                },
+                "example": {
+                  "message": "Validation Error",
+                  "issues": [
+                    {
+                      "code": "invalid_type",
+                      "expected": "number",
+                      "received": "nan",
+                      "path": [
+                        "page"
+                      ],
+                      "message": "Expected number, received nan"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-ins/:checkInId/validate": {
+      "patch": {
+        "tags": ["Check-ins"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Validate an user check-in"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ValidateError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ]
+                },
+                "examples": {
+                  "Late Check-in Validation": {
+                    "value": {
+                      "message": "You can't validate a check-in after 20 minutes of its creation"
+                    }
+                  },
+                  "Validation Failed": {
+                    "value": {
+                      "message": "Validation Error",
+                      "issues": [
+                        {
+                          "validation": "uuid",
+                          "code": "invalid_string",
+                          "message": "Invalid uuid",
+                          "path": [
+                            "checkInId"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Check-in Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check-ins/metrics": {
+      "get": {
+        "tags": ["Check-ins"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return user's check-ins count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "example": {
+                  "count": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Gym": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidateError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "expected": {
+                  "type": "string"
+                },
+                "received": {},
+                "path": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "refreshToken"
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
